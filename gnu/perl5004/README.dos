@@ -1,0 +1,125 @@
+This is a MSDOS/DJGPP port of perl 5.004_02.
+
+For those who don't know what DJGPP is, here is a brief intro from the 
+DJGPP faq:
+
+ DJGPP is a port of GNU C/C++ compiler and development tools to 32-bit,
+ protected-mode environment on Intel 32-bit CPUs running MS-DOS and compatible
+ operating systems, by DJ Delorie <dj@delorie.com> and friends.  Starting from
+ v2.0, DJGPP programs do not need a separate extender program, only a DPMI
+ server to run; DJGPP includes a free 32-bit DPMI server which allows for a
+ 32-bit, 4 GByte flat address space and up to 256 MBytes of virtual memory, a
+ compiler which produces 32-bit protected-mode code, and a suite of GNU
+ development tools ported to MS-DOS.  These provide for a development
+ environment which specifically favors porting Unix programs, but is also
+ suitable for writing new code (for example, the DOS version of the well-known
+ game `Quake' by id Software was compiled with DJGPP).  With a few exceptions
+ (notably, some of the C++ class libraries), DJGPP is *free* which makes it
+ deal for developing free and commercial software alike.
+ 
+For more details, check out the home of DJGPP at:
+
+        http://www.delorie.com/djgpp/
+
+You can get the FAQ and the DJGPP packages from the SimTel.NET mirrors in 
+the pub/simtelnet/gnu/djgpp/ subdirectory.
+
+The primary SimTel.NET site is:
+     ftp.simtel.net, directory /pub/simtelnet/gnu/djgpp
+
+I recommend to download and install the following packages:
+
+ `v2/readme.1st'        This explains how to install DJGPP and get started
+                        with using it.
+                      
+ `v2/faq210b.zip'       The latest edition of the FAQ list.  Use it whenever
+                        you have problems installing and using DJGPP.
+                                              
+ `v2misc/csdpmi3b.zip'  CWSDPMI, the DJGPP free DPMI server.  If you can 
+                        get DPMI services in your environment, like if you 
+                        run under Windows, QDPMI, or OS/2, you don't need
+                        CWSDPMI.
+
+ `v2gnu/bsh1147b.zip'   Bash (`Borne-Again SHell'), the GNU shell, and its
+                        docs. This is required if you want to run MakeMaker.        
+                        
+For description of additional files not mentioned here, get the file
+`00_index.txt'; it contains a full list of the distribution files and a
+short description of every file.
+
+
+Installation
+------------
+
+- Unzip the binary package `perl542b.zip' preserving the directory
+structure (-d switch to PKUNZIP) from the top DJGPP directory (if you 
+don't use other DJGPP packages, you can unzip it from any directory you
+like, e.g. c:/perl. Don't forget to add the `bin' directory to your PATH!).
+If you want to use perl with Long File Names (win0.95), then use a LFN
+aware unzip and add
+
+         set LFN=y
+
+to your autoexec.bat or DJGPP.ENV.
+
+- Edit `lib/perl5/Config.pm', and replace every `c:/djgpp' with your
+installation directory. This can be done with perl too:
+   
+         perl -i~ -pe "s!c:/djgpp!x:/djroot!i;" lib/perl5/Config.pm
+                                  ^^^^^^^^^
+                   Substitute this with your install directory!
+
+- This version of perl expects its library files in `../lib/perl5/',
+which is relative to the path of perl.exe. If you don't like this,
+you can use the PERL5LIB environment variable to tell perl where 
+the library is. E.g:
+     
+         set PERL5LIB=c:/perl/lib
+              
+Warning: if you set PERL5LIB and use tainting checks (-T command line 
+option), perl ignores PERL5LIB, so you must use the -I command line
+option or the "use lib '...'"  construct. Or you can recompile perl.exe :)
+
+- Perl works best with a unixy shell, so you may want to download and
+install bash (bshXXXXb.zip from the usual DJGPP sites). After installing
+it make the 'SHELL' environment variable point to your bash.exe.
+Finally create a `link' to your bash.exe in your `bin' directory:
+
+         ln -s bash.exe sh.exe          
+or
+         stubify -g sh.exe              
+         stubedit sh.exe runfile=bash       
+or
+         copy bash.exe sh.exe
+
+- The documentation is in `lib/perl5/pod'. You can read the .pod files
+with any editor, or you can use the `perldoc' utility. For more info:
+
+         perl -S perldoc -h
+
+It tries to use less.exe or more.com, but you can use other pagers:
+     
+         SET PAGER=path_of_your_favourite_pager
+         
+Pros
+----
+
+* No memory problems, perl can use up to 256Mbytes of virtual memory.
+* DJGPP programs can use long command lines when communicating with
+  each other.
+* Long filename support under win0.95.
+* Builtin filename globbing (with extras: like ".../*.pl").
+* And more.. :-)
+
+Cons
+----
+
+* No dynamic loading (yet).
+* No sockets (yet).
+* No fork (hey, this is just dos!).
+* Inplace editing is a little bit broken if LFN=n.
+* This documentation could be better ;-)
+
+If you have any dos/djgpp specific problem using perl, just email me:
+
+        Laszlo Molnar <molnarl@cdata.tvnet.hu>
